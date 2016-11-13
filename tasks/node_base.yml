@@ -1,0 +1,83 @@
+# create default user and group
+- group: name={{ nem_group }} gid={{ nem_gid }} state=present
+- user: name={{ nem_user }} shell=/bin/false home={{ working_dir }} uid={{ nem_uid }} group={{ nem_group }} state=present
+
+# see. http://blog.nem.io/ubuntu-installation-guide-standalone/
+- name: install java8 ppa
+  apt_repository: repo='ppa:webupd8team/java' state=present
+# install java8 by manually
+- name: Accept Java 8 License
+  become: yes
+  debconf: name='oracle-java8-installer' question='shared/accepted-oracle-license-v1-1' value='true' vtype='select'
+- name: install java8 
+  package: name=oracle-java8-installer state=latest update_cache=yes force=yes
+- name: install neccesary packages
+  package: name=unzip state=latest
+
+- name: check if NIS is downloaded
+  stat: path=/usr/local/src/{{ nis_ncc_tgz }}
+  register: nis_is_downloaded
+
+- name: download NIS
+  get_url: url=http://bob.nem.ninja/{{ nis_ncc_tgz }} sha256sum={{ nis_ncc_tgz_sha256 }} dest=/usr/local/src/{{ nis_ncc_tgz }} force=True
+  when: not nis_is_downloaded.stat.exists
+
+- name: check if NIS data is downloaded
+  stat: path=/usr/local/src/{{ nis_mainnet_data }}
+  register: nis_data_is_downloaded
+
+- name: download NIS data
+  get_url: url=http://bob.nem.ninja/{{ nis_mainnet_data }} sha256sum={{ nis_mainnet_data_sha256 }} dest=/usr/local/src/{{ nis_mainnet_data }} force=True
+  when: not nis_data_is_downloaded.stat.exists
+
+- name: check if servant is downloaded
+  stat: path=/usr/local/src/{{ servant }}
+  register: servant_is_downloaded
+
+- name: download servant
+  get_url: url=http://bob.nem.ninja/{{ servant }} sha256sum={{ servant_sha256 }} dest=/usr/local/src/{{ servant }} force=True
+  when: not servant_is_downloaded.stat.exists
+
+- name: create base directory
+  file: dest={{ nis_ncc_base_dir }} state=directory owner={{ nem_user }} group={{ nem_group }} mode=0755 recurse=yes
+
+- name: create unarchive directory1
+  file: dest={{ item }} state=directory owner={{ nem_user }} group={{ nem_group }} mode=0755 recurse=yes
+  with_items: 
+    - "{{ nis_home }}"
+    - "{{ ncc_home }}"
+    - "{{ servant_home }}"
+    - "{{ working_dir }}/nis/data"
+
+- name: check if NIS is unarchived
+  stat: path={{ nis_home }}/config.properties
+  register: nis_is_unarchived
+
+- name: unarchive nis-ncc
+  command: tar -xzf /usr/local/src/nis-ncc-{{ nem_version }}.tgz -C "{{ nis_ncc_base_dir}}/{{ nem_version }}"
+  when: not nis_is_unarchived.stat.exists
+
+- name: set NIS setting
+  template: src="{{ nem_version }}/package/nis/config.properties" dest="{{ nis_home }}/config.properties" owner={{ nem_user }} group={{ nem_group }} mode=755
+
+- name: check servant is unpacked
+  stat: path={{ servant_home }}/servant
+  register: servant_is_unpacked
+
+- name: unarchive servant 
+  command: "unzip /usr/local/src/{{ servant }} -d {{ servant_home }}"
+  when: not servant_is_unpacked.stat.exists
+
+- name: set Servant setting
+  template: src="servant/{{ servant_version }}/servant/config.properties" dest="{{ servant_home }}/servant/config.properties" owner={{ nem_user }} group={{ nem_group }} mode=755
+
+- name: check nis5_mainnet.h2.db exist
+  stat: path="{{ working_dir }}/nis/data/nis5_mainnet.h2.db"
+  register: nis_data_is_exists
+
+- name: unarchive nis data
+  command: "unzip  /usr/local/src/{{ nis_mainnet_data }} -d {{ working_dir }}/nis/data"
+  when: not nis_data_is_exists.stat.exists
+
+- name: change own to nem_user:nem_group
+  file: dest={{ working_dir }} state=directory owner={{ nem_user }} group={{ nem_group }} mode=0755 recurse=yes

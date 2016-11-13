@@ -1,0 +1,5 @@
+LOG="/var/log/nem/nis.log"
+ERROR_LOG="/var/log/nem/nis.error_log"
+RUN_DIR="{{ nis_ncc_base_dir }}/var/run/nem"
+LOCK_FILE={{ nis_ncc_base_dir }}/nis.lock
+PID_FILE={{ nis_ncc_base_dir }}/var/run/nem/nis-{{ nem_version }}.pid

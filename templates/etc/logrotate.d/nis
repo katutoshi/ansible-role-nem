@@ -1,0 +1,14 @@
+/var/log/nem/nis.error_log
+/var/log/nem/nis.log
+{
+        rotate 4
+        weekly
+        missingok
+        notifempty
+        compress
+        delaycompress
+        sharedscripts
+        postrotate
+                systemctl restart nis.service 2>&1 || true
+        endscript
+}

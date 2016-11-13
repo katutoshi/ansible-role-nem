@@ -1,0 +1,1 @@
+- Shohei Kamon <kamon@etherinc.co> [@kmn](https://github.com/kmn)

@@ -1,0 +1,22 @@
+[Unit]
+Description=NCC {{ nem_version }}
+After=syslog.target network.target
+
+Before=remote-fs-pre.target
+DefaultDependencies=no
+Conflicts=shutdown.target
+Before=shutdown.target
+
+[Service]
+Type=forking
+WorkingDirectory={{ working_dir }}
+EnvironmentFile=-/etc/default/ncc
+ExecStart=/usr/local/bin/ncc-start.sh
+ExecStop=/usr/local/bin/ncc-stop.sh
+User={{ nem_user }}
+Group={{ nem_group }}
+KillMode=none
+Restart = always
+
+[Install]
+WantedBy=multi-user.target

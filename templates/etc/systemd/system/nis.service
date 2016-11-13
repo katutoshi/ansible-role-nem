@@ -1,0 +1,22 @@
+[Unit]
+Description=NIS {{ nem_version }}
+After=syslog.target network.target
+
+Before=remote-fs-pre.target
+DefaultDependencies=no
+Conflicts=shutdown.target
+Before=shutdown.target
+
+[Service]
+Type=forking
+EnvironmentFile=-/etc/default/nis
+WorkingDirectory={{ working_dir }}
+ExecStart=/usr/local/bin/nis-start.sh
+ExecStop=/usr/local/bin/nis-stop.sh
+User={{ nem_user }}
+Group={{ nem_group }}
+KillMode=none
+Restart = always
+
+[Install]
+WantedBy=multi-user.target

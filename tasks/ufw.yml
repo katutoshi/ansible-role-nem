@@ -1,0 +1,14 @@
+- name: allow ufw for ssh
+  command: "ufw allow {{ ansible_port }}"
+
+- name: allow ufw for nis
+  command: "ufw allow 7880"
+
+- name: allow ufw for nis
+  command: "ufw allow 7890"
+
+- name: allow ufw for nis
+  command: "ufw allow 7778"
+
+- name: enable ufw
+  command: "ufw enable"

@@ -1,0 +1,75 @@
+- name: create directories for NIS,NCC,Servant systemd
+  file: dest={{ item }} state=directory owner={{ nem_user }} group={{ nem_group }} mode=0755 recurse=yes
+  with_items:
+    - "{{ nis_ncc_base_dir }}/var/run/nem/"
+    - "/var/log/nem/"
+## 
+# NIS
+##
+- name: Set NIS {{ nem_version }} start/stop scripts
+  template: src={{ item }} dest=/{{ item }} owner=root group=root mode=755
+  with_items:
+      - "usr/local/bin/nis-start.sh"
+      - "usr/local/bin/nis-stop.sh"
+- name: Set NIS {{ nem_version }} service
+  template: src=etc/systemd/system/nis.service dest=/etc/systemd/system/nis.service owner=root group=root mode=644
+
+- name: Set NIS {{ nem_version }} Environment file
+  template: src=etc/default/nis dest=/etc/default/nis owner=root group=root mode=644
+
+- name: Enable NIS
+  command: systemctl enable nis.service
+  when: enable_nis == True
+- name: Disable NIS
+  command: systemctl disable nis.service
+  when: not enable_nis == True
+- name: Enable NIS logrotate
+  template: src=etc/logrotate.d/nis dest=/etc/logrotate.d/nis owner=root group=root mode=644
+  when: enable_nis == True
+
+## 
+# Servant
+##
+- name: Set servant {{ servant_version }} start/stop scripts
+  template: src={{ item }} dest=/{{ item }} owner=root group=root mode=755
+  with_items:
+      - "usr/local/bin/servant-start.sh"
+      - "usr/local/bin/servant-stop.sh"
+- name: Set Servant {{ servant_version }} service
+  template: src=etc/systemd/system/servant.service dest=/etc/systemd/system/servant.service owner=root group=root mode=644
+
+- name: Set Servant {{ servant_version }} Environment file
+  template: src=etc/default/servant dest=/etc/default/servant owner=root group=root mode=644
+
+- name: Enable Servant
+  command: systemctl enable servant.service
+  when: enable_servant == True
+- name: Disable Servant
+  command: systemctl disable servant.service
+  when: not enable_servant == True
+
+- name: Enable Servant logrotate
+  template: src=etc/logrotate.d/servant dest=/etc/logrotate.d/servant owner=root group=root mode=644
+  when: enable_servant == True
+
+## 
+# NCC
+##
+- name: Set NCC {{ nem_version }} start/stop scripts
+  template: src={{ item }} dest=/{{ item }} owner=root group=root mode=755
+  with_items:
+      - "usr/local/bin/ncc-start.sh"
+      - "usr/local/bin/ncc-stop.sh"
+- name: Set NCC {{ nem_version }} service
+  template: src=etc/systemd/system/ncc.service dest=/etc/systemd/system/ncc.service owner=root group=root mode=644
+
+- name: Set NCC {{ nem_version }} Environment file
+  template: src=etc/default/ncc dest=/etc/default/ncc owner=root group=root mode=644
+
+- name: Enable NCC
+  command: systemctl enable ncc.service
+  when: enable_ncc == True
+
+- name: Disable NCC
+  command: systemctl disable ncc.service
+  when: not enable_ncc == True

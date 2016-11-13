@@ -1,0 +1,22 @@
+- name: install supervisord
+  package: name=supervisor state=latest update_cache=yes
+- name: set NIS setting
+  template: src=etc/supervisor/conf.d/nis.conf dest=/etc/supervisor/conf.d/nis.conf owner=root group=root mode=644
+  when: enable_nis == True
+- name: delete NIS setting
+  file: path=/etc/supervisor/conf.d/nis.conf state=absent
+  when: not enable_nis == True
+
+- name: set NCC setting
+  template: src=etc/supervisor/conf.d/ncc.conf dest=/etc/supervisor/conf.d/ncc.conf owner=root group=root mode=644
+  when: enable_ncc == True
+- name: delete NCC setting
+  file: path=/etc/supervisor/conf.d/ncc.conf state=absent
+  when: not enable_ncc == True
+
+- name: set Servant setting
+  template: src=etc/supervisor/conf.d/servant.conf dest=/etc/supervisor/conf.d/servant.conf owner=root group=root mode=644
+  when: enable_servant == True
+- name: delete Servant setting
+  file: path=/etc/supervisor/conf.d/servant.conf state=absent
+  when: not enable_servant == True

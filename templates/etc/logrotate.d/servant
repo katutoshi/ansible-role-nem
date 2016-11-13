@@ -1,0 +1,14 @@
+/var/log/nem/servant.error_log
+/var/log/nem/servant.log
+{
+        rotate 4
+        weekly
+        missingok
+        notifempty
+        compress
+        delaycompress
+        sharedscripts
+        postrotate
+                systemctl restart servant.service 2>&1 || true
+        endscript
+}
