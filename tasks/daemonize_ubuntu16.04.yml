@@ -6,11 +6,15 @@
 ## 
 # NIS
 ##
+- name: create directories for NIS systemd limits
+  file: dest=/etc/systemd/system/nis.service.d state=directory owner=root group=root mode=0755 recurse=yes
+
 - name: Set NIS {{ nem_version }} start/stop scripts
   template: src={{ item }} dest=/{{ item }} owner=root group=root mode=755
   with_items:
       - "usr/local/bin/nis-start.sh"
       - "usr/local/bin/nis-stop.sh"
+      - "etc/systemd/system/nis.service.d/limits.conf"
 - name: Set NIS {{ nem_version }} service
   template: src=etc/systemd/system/nis.service dest=/etc/systemd/system/nis.service owner=root group=root mode=644
 
@@ -30,11 +34,15 @@
 ## 
 # Servant
 ##
+- name: create directories for Servant systemd limits
+  file: dest=/etc/systemd/system/servant.service.d state=directory owner=root group=root mode=0755 recurse=yes
+
 - name: Set servant {{ servant_version }} start/stop scripts
   template: src={{ item }} dest=/{{ item }} owner=root group=root mode=755
   with_items:
       - "usr/local/bin/servant-start.sh"
       - "usr/local/bin/servant-stop.sh"
+      - "etc/systemd/system/servant.service.d/limits.conf"
 - name: Set Servant {{ servant_version }} service
   template: src=etc/systemd/system/servant.service dest=/etc/systemd/system/servant.service owner=root group=root mode=644
 
