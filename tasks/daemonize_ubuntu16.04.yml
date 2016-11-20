@@ -49,7 +49,6 @@
 - name: Set Servant {{ servant_version }} Environment file
   template: src=etc/default/servant dest=/etc/default/servant owner=root group=root mode=644
 
-
 - name: Enable Servant
   command: systemctl enable servant.service
   when: enable_servant == True
