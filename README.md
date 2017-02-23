@@ -187,6 +187,10 @@ Make sure to add yourself to [AUTHORS](AUTHORS.md).
 
 # Changelog
 
+## v0.6.83 beta
+
+- NEM verion 0.6.83 beta [release note](https://forum.nem.io/t/nem-beta-0-6-83/3256)
+
 ## v0.6.82 beta
 
 - Initial release

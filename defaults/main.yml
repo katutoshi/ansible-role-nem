@@ -49,11 +49,11 @@ nis_delayBlockLoading: "true"
 ##
 nis_ncc_base_dir: "/var/lib/nem/nix"
 working_dir: "/var/lib/nem"
-nem_version: 0.6.82
+nem_version: 0.6.83
 nis_ncc_tgz: "nis-ncc-{{ nem_version }}.tgz"
-nis_ncc_tgz_sha256: 76f702260471cba3c7fdb16c18e884f2b39a169d5bdf621c1e14c272cf6426d7
-nis_mainnet_data: nis5_mainnet-681k.h2.db.zip
-nis_mainnet_data_sha256: a2bbe8719a873f647c8beeb9a38a2aa5cb15bcc39f6e481bde3dc714eecec77a
+nis_ncc_tgz_sha256: 2012d34f6ae22ed417e5be817aa33d85ac86bff833ca11f486ecb476e5c16509
+nis_mainnet_data: nis5_mainnet-966500.h2.db.zip
+nis_mainnet_data_sha256: 7aa2a45f5f2cb8bb2c9755895e4770927a234af9e319b0a0f493d2ffb39a3a4d
 servant_version: "0_0_4"
 servant_home: "{{ working_dir }}/servant/{{ servant_version }}"
 servant: "servant_{{ servant_version }}.zip"
