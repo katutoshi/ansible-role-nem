@@ -9,7 +9,7 @@
 - name: Accept Java 8 License
   become: yes
   debconf: name='oracle-java8-installer' question='shared/accepted-oracle-license-v1-1' value='true' vtype='select'
-- name: install java8 
+- name: install java8
   package: name=oracle-java8-installer state=latest update_cache=yes force=yes
 - name: install neccesary packages
   package: name=unzip state=latest
@@ -43,7 +43,7 @@
 
 - name: create unarchive directory1
   file: dest={{ item }} state=directory owner={{ nem_user }} group={{ nem_group }} mode=0755 recurse=yes
-  with_items: 
+  with_items:
     - "{{ nis_home }}"
     - "{{ ncc_home }}"
     - "{{ servant_home }}"
@@ -64,7 +64,7 @@
   stat: path={{ servant_home }}/servant
   register: servant_is_unpacked
 
-- name: unarchive servant 
+- name: unarchive servant
   command: "unzip /usr/local/src/{{ servant }} -d {{ servant_home }}"
   when: not servant_is_unpacked.stat.exists
 
@@ -75,9 +75,29 @@
   stat: path="{{ working_dir }}/nis/data/nis5_mainnet.h2.db"
   register: nis_data_is_exists
 
+- name: check nis5_mainnet.h2.db exist
+  stat: path="{{ working_dir }}/nis/data/{{ nis_mainnet_filename }}"
+  register: force_nis_data_is_exists
+
 - name: unarchive nis data
   command: "unzip  /usr/local/src/{{ nis_mainnet_data }} -d {{ working_dir }}/nis/data"
   when: not nis_data_is_exists.stat.exists
+
+- name: force renew nis data
+  file: path={{ working_dir }}/nis/data/nis5_mainnet.h2.db state=absent
+  when: force_renew_nis_data
+
+- name: force unarchive nis data
+  command: "unzip  /usr/local/src/{{ nis_mainnet_data }} -d {{ working_dir }}/nis/data"
+  when: force_renew_nis_data  and  not force_nis_data_is_exists.stat.exists
+
+- name: check if lock.db exists
+  stat: path={{ working_dir }}/nis/data/nis5_mainnet.lock.db
+  register: nis5_mainnet_lock_db_exists
+
+- name: force delete lock.db
+  file: path={{ working_dir }}/nis/data/nis5_mainnet.lock.db state=absent
+  when: force_renew_nis_data and nis5_mainnet_lock_db_exists
 
 - name: change own to nem_user:nem_group
   file: dest={{ working_dir }} state=directory owner={{ nem_user }} group={{ nem_group }} mode=0755 recurse=yes

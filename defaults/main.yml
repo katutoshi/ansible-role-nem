@@ -4,7 +4,7 @@ nem_uid: "510"
 nem_gid: "510"
 
 
-## 
+##
 # nis default settings
 ##
 
@@ -45,15 +45,16 @@ nis_delayBlockLoading: "true"
 
 
 ##
-# NIS settings for 
+# NIS settings for
 ##
 nis_ncc_base_dir: "/var/lib/nem/nix"
 working_dir: "/var/lib/nem"
-nem_version: 0.6.83
+nem_version: 0.6.84
 nis_ncc_tgz: "nis-ncc-{{ nem_version }}.tgz"
-nis_ncc_tgz_sha256: 2012d34f6ae22ed417e5be817aa33d85ac86bff833ca11f486ecb476e5c16509
-nis_mainnet_data: nis5_mainnet-966500.h2.db.zip
-nis_mainnet_data_sha256: 7aa2a45f5f2cb8bb2c9755895e4770927a234af9e319b0a0f493d2ffb39a3a4d
+nis_ncc_tgz_sha256: 18b3ce5de42067de2af1da69bb082b6c05a425198f407a392cba3bdae5c3b686
+nis_mainnet_filename: "nis5_mainnet-1002k.h2.db"
+nis_mainnet_data: "{{ nis_mainnet_filename }}.zip"
+nis_mainnet_data_sha256: 9532141767087ed0e74edca4c82d86e964a520b7b22c19de6cb00dbedb0f8772
 servant_version: "0_0_4"
 servant_home: "{{ working_dir }}/servant/{{ servant_version }}"
 servant: "servant_{{ servant_version }}.zip"
@@ -69,3 +70,4 @@ ncc_home: "{{ nis_ncc_base_dir }}/{{ nem_version }}/package/ncc"
 ##
 nem_bootName:
 delegate_private_key:
+force_renew_nis_data: False
