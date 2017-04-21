@@ -49,9 +49,9 @@ nis_delayBlockLoading: "true"
 ##
 nis_ncc_base_dir: "/var/lib/nem/nix"
 working_dir: "/var/lib/nem"
-nem_version: 0.6.84
+nem_version: 0.6.87
 nis_ncc_tgz: "nis-ncc-{{ nem_version }}.tgz"
-nis_ncc_tgz_sha256: 18b3ce5de42067de2af1da69bb082b6c05a425198f407a392cba3bdae5c3b686
+nis_ncc_tgz_sha256: 1168167aacc0a4e7c7ebd5ae4162e8a841ba4e64a5bba197f5147ef6119d5e76
 nis_mainnet_filename: "nis5_mainnet-1002k.h2.db"
 nis_mainnet_data: "{{ nis_mainnet_filename }}.zip"
 nis_mainnet_data_sha256: 9532141767087ed0e74edca4c82d86e964a520b7b22c19de6cb00dbedb0f8772
